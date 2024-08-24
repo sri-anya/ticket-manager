@@ -19,7 +19,10 @@ class User(db.Model, SerializerMixin):
     role = db.Column(db.String)
 
     # relationships
-    comments = db.relationship('Comment', back_populates='author', lazy=True)
+    comments = db.relationship('Comment', back_populates='author', cascade='all, delete-orphan') #a user can leave multiple comments
+    tickets_created = db.relationship('Ticket', back_populates='creator', cascade='all, delete-orphan') #a user can create multiple tickets
+
+    tickets_assigned = association_proxy('ticket_assignees', 'user', creator=lambda user_obj: TicketAssignee(user=user_obj))
 
     @hybrid_property
     def password_hash(self):
@@ -49,6 +52,12 @@ class Ticket(db.Model, SerializerMixin):
     due_date = db.Column(db.DateTime)
     created_by =  db.Column(db.Integer(), db.ForeignKey('users.id'))
 
+    # relationships
+    creator = db.realtionship('User', back_populates="tickets_created")
+    comments = db.relationship('Comment', back_populates='ticket', cascade='all, delete-orphan') #a ticket can have multiple comments
+    # Association proxy to get assignees for this user through assignees
+    assignees = association_proxy('ticket_assignees', 'ticket', creator=lambda ticket_obj: TicketAssignee(ticket=ticket_obj))
+
     def __repr__(self):
         return f'<Ticket {self.title}: {self.assignee}>'
     
@@ -62,12 +71,15 @@ class Comment(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
     ticket_id = db.Column(db.Integer(), db.ForeignKey('tickets.id'))
 
+    author = db.relationship('User', back_populates="comments") # comment belongs to a user
+    ticket = db.relationship('Ticket', back_populates="comments") #comment belongs to a user
+
     def __repr__(self):
         return f'<Comment {self.id}: {self.summary}>'
     
 
-class TagAssignee(db.Model, SerializerMixin):
-    __tablename__ = 'tag_assignees'
+class TicketAssignee(db.Model, SerializerMixin):
+    __tablename__ = 'ticket_assignees'
 
     id = db.Column(db.Integer, primary_key=True)
     
@@ -77,8 +89,8 @@ class TagAssignee(db.Model, SerializerMixin):
     
     ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    ticket = db.relationship('Ticket', back_populates='assignees')
-    user = db.relationship('User', back_populates='assigned_tickets')
+    ticket = db.relationship('Ticket', back_populates='ticket_assignees')
+    user = db.relationship('User', back_populates='ticket_assignees')
 
     def __repr__(self):
         return f'<TagAssignee {self.id}: {self.active}>'
