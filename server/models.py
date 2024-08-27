@@ -40,7 +40,10 @@ class Ticket(db.Model, SerializerMixin):
     __tablename__ = 'tickets'
 
     serialize_rules = (
+        '-created_by',
         '-creator.tickets_created',
+        '-creator.image_url',
+        '-creator.password_hash'
         '-creator.comments',
         '-comments.ticket',
         '-ticket_assignees',
