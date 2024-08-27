@@ -69,9 +69,45 @@ class TicketByID(Resource):
             return make_response('', 204)
         else:
             return make_response({"message":"record not found"},404)
+        
+class UserByID(Resource):
+    def get(self, id):
+        user = User.query.filter_by(id=id).first()
+        if user:
+            return make_response(jsonify(user.to_dict()), 200)
+        else:
+            return make_response({"message":"record not found"},404)
+
+    def patch(self, id):
+        data = request.get_json()
+
+        user = User.query.filter_by(id=id).first()
+        if user:
+            for attr in data:
+                setattr(user, attr, data[attr])
+
+            db.session.add(user)
+            db.session.commit()
+
+            return make_response(user.to_dict(), 200)
+        else:
+            return make_response({"message":"record not found"},404)
+
+
+    def delete(self, id):
+        user = User.query.filter_by(id=id).first()
+        if user:
+            db.session.delete(user)
+            db.session.commit()
+
+            return make_response('', 204)
+        else:
+            return make_response({"message":"record not found"},404)
+
 
 api.add_resource(Tickets, '/tickets')
 api.add_resource(TicketByID, '/tickets/<int:id>')
+api.add_resource(UserByID, '/users/<int:id>')
 
 @app.errorhandler(NotFound)
 def handle_not_found(e):
