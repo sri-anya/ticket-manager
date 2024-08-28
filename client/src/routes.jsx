@@ -1,9 +1,7 @@
-
 import Home from "./components/Home";
 import ErrorPage from './components/ErrorPage';
 import About from "./components/About";
-
-
+import Login from "./components/Login";
 import App from "./App";
 
 const routes = [
@@ -17,18 +15,14 @@ const routes = [
                 element: <Home />
             }, 
             
-            // {
-            //     path: "/tickets",
-            //     element: <Tickets />
-            // },
+            {
+                path: "/login",
+                element: <Login />
+            },
             {
                 path: "/about",
                 element: <About />
-            },  
-            // {
-            //     path: "/ticket/:id",
-            //     element: <Ticket />
-            // }
+            }
         ]
     }
     // {

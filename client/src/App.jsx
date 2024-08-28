@@ -1,39 +1,24 @@
 import { useState, useEffect } from 'react'
-import { Outlet } from 'react-router-dom'
-import Navbar from './components/Navbar'
-import Background from './components/Background'
-import Footer from './components/Footer'
+import Login from './components/Login'
 
 
 function App() {
 
   const [rec, setRec] = useState([])
 
-  useEffect(() => {
+  const [user, setUser] = useState(null);
 
-    const fetchRecipes = async () => {
-      try {
-        const data = await fetch("http://127.0.0.1:5555/tickets");
-        const response = await data.json();
-        setRec(response);
-        
+  function handleLogin(user) {
+    setUser(user);
+  }
 
-      } catch (error) {
-        console.error("Error fetching recipes:", error);
-      }
-    };
-    fetchRecipes();
-  }, []);
-
+  function handleLogout() {
+    setUser(null);
+  }
 
   return (
     <>
-      {console.log(rec)}
-      <Background />
-      <Navbar />
-      <Outlet context={{rec, setRec}}/>
-      <Footer />
-
+      <Login/>
     </>
   )
 }
