@@ -4,23 +4,27 @@ import Login from './components/Login'
 
 function App() {
 
-  const [rec, setRec] = useState([])
-
   const [user, setUser] = useState(null);
 
-  function handleLogin(user) {
-    setUser(user);
+  useEffect(() => {
+    fetch("http://127.0.0.1:5555/check_session").then((response) => {
+      if (response.ok) {
+        response.json().then((user) => setUser(user));
+      }
+    });
+  }, []);
+
+ 
+
+
+  if (user) {
+   
+    return <h2>Welcome, {user.name}!</h2>;
+  } else {
+    return <Login onLogin={setUser} />;
   }
 
-  function handleLogout() {
-    setUser(null);
-  }
 
-  return (
-    <>
-      <Login/>
-    </>
-  )
 }
 
 export default App
