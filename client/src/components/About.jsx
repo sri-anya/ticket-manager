@@ -1,12 +1,16 @@
-import React from 'react';
-
-
+import React, {useState} from 'react';
+import Navbar from './Navbar.jsx';
 
 const About = () => {
+  const [user, setUser] = useState({
+    name: "Aastha",
+    email:"a@a.com",
+    password:"aastha"
+  });
   return (
     <div>
       
-     
+      {/* <Navbar user={user} setUser={setUser} /> */}
       <main className='flex gap-20 px-44 py-28'>
         <div className="image h-[1000] w-[450]"><img width="450" height="500" className='object-contain' src="/chefImage.jpg" alt="" /></div>
         <div className="content w-3/4 py-8">

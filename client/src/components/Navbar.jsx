@@ -2,7 +2,20 @@ import React from 'react'
 import Divider from './Divider'
 import {Link} from 'react-router-dom'
 
-const Navbar = () => {
+const Navbar = ({user, setUser}) => {
+
+    
+    function handleLogoutClick() {
+        fetch("/api/logout", { method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+              },
+         }).then((r) => {
+          if (r.ok) {
+            setUser(null);
+          }
+        });
+      }
     return (
 
         <div className='sticky top-0 z-30'>
@@ -11,17 +24,16 @@ const Navbar = () => {
                 <div className="logo cursor-pointer"><img src="/dp-black.svg" alt="" /></div>
                 <div className="options">
                     <ul className='flex gap-8'>
-                        <Link className='cursor-pointer' to="/">Home</Link>
-                        <Link className='cursor-pointer' to="">All Recipes</Link>
-                        <Link className='cursor-pointer' to="/about">About Me</Link>
+                        <Link className='cursor-pointer' to="/home">Home</Link>
+                        <Link className='cursor-pointer' to="/tickets">All Tickets</Link>
+                        <Link className='cursor-pointer' to="/about">About</Link>
                         
                     </ul>
                 </div>
                 <div className="socials">
-                    <ul className='flex gap-3 justify-center'>
-                        <a href=""><li className='cursor-pointer'><img src="/facebook.svg" alt="" /></li></a>
-                        <a href=""><li className='cursor-pointer'><img src="/instagram.svg" alt="" /></li></a>
-                        <a href=""><li className='cursor-pointer'><img src="/youtube.svg" alt="" /></li></a>
+                    <ul className='flex gap-3 justify-center items-center'>
+                        <h3>Hello! {user.name}</h3>
+                        <button type="submit" className="px-4 py-2 bg-pointer-500 text-black rounded" onClick={handleLogoutClick}>Logout</button>
                     </ul>
                 </div>
 

@@ -1,8 +1,9 @@
 import Home from "./components/Home";
 import ErrorPage from './components/ErrorPage';
 import About from "./components/About";
-import Login from "./components/Login";
 import App from "./App";
+import TicketsContainer from "./components/TicketsContainer";
+import SingleTicketPage from "./components/SingleTicketPage";
 
 const routes = [
     {
@@ -10,46 +11,39 @@ const routes = [
         element: <App />,
         errorElement: <ErrorPage />,
         children: [
-             {
-                path: "/",
+            //  {
+            //     path: "/",
+            //     element: <Home />
+            // }, 
+            {
+                path: "/home",
                 element: <Home />
             }, 
-            
-            {
-                path: "/login",
-                element: <Login />
-            },
             {
                 path: "/about",
                 element: <About />
+            },
+            {
+                path: "/tickets",
+                element: <TicketsContainer />,
+            },
+            {
+                path: "/tickets/:ticketId",
+                element: <SingleTicketPage/>
             }
         ]
     }
     // {
     //     path: "/",
-    //     element: <Home />,
+    //     element: <App />,
     //     errorElement: <ErrorPage />
     // },
     // {
-    //     path: "/recipe-container",
-    //     element: <RecipeContainer />,
-    //     errorElement: <ErrorPage />
-    // },
-    // {
-    //     path: "/contact",
-    //     element: <Contact />,
-    //     errorElement: <ErrorPage />
-    // },
-    // {
-    //     path: "/about-me",
+    //     path: "/about",
     //     element: <About />,
     //     errorElement: <ErrorPage />
-    // },
-    // {
-    //     path: "/recipe/:id",
-    //     element: <SingleRecipe />,
-    //     errorElement: <ErrorPage />
-    // },
+    // }
+    
     
 
 ]

@@ -1,0 +1,12 @@
+{
+    "users": [{
+      "name": "Uri Lee",
+      "email": "uri@lee.com",
+      "password": "urilee"
+    },
+    {
+        "name": "Mark Dee",
+        "email": "mark@dee.com",
+        "password": "markdee"
+      }]
+  }

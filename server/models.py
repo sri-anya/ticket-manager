@@ -1,9 +1,12 @@
+from sqlalchemy.orm import validates
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_serializer import SerializerMixin
+
 from sqlalchemy.ext.associationproxy import association_proxy
 from config import db
-import datetime
+from datetime import datetime
 
-from config import db
+from config import db, bcrypt
 
 # Models go here!
 class User(db.Model, SerializerMixin):
@@ -21,9 +24,23 @@ class User(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
-    password_hash = db.Column(db.String)
+    _password_hash = db.Column(db.String)
     image_url = db.Column(db.String)
     role = db.Column(db.String)
+
+    @hybrid_property
+    def password_hash(self):
+        raise Exception('Password hashes may not be viewed.')
+
+    @password_hash.setter
+    def password_hash(self, password):
+        password_hash = bcrypt.generate_password_hash(
+            password.encode('utf-8'))
+        self._password_hash = password_hash.decode('utf-8')
+
+    def authenticate(self, password):
+        return bcrypt.check_password_hash(
+            self._password_hash, password.encode('utf-8'))
 
     # relationships
     comments = db.relationship('Comment', back_populates='author', cascade='all, delete-orphan') #a user can leave multiple comments
@@ -60,9 +77,9 @@ class Ticket(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     summary = db.Column(db.String)
-    status = db.Column(db.String) #open, in-progress, closed
-    priority = db.Column(db.String) #low, medium, high
-    due_date = db.Column(db.DateTime)
+    status = db.Column(db.String, default='open')  # Default value for status
+    priority = db.Column(db.String, default='low')
+    # due_date = db.Column(db.DateTime)
     created_by =  db.Column(db.Integer(), db.ForeignKey('users.id'))
 
     # relationships
@@ -74,7 +91,7 @@ class Ticket(db.Model, SerializerMixin):
     assignees = association_proxy('ticket_assignees', 'user', creator=lambda user_obj: TicketAssignee(usert=user_obj))
 
     def __repr__(self):
-        return f'<Ticket name:{self.title}, assignees: {self.assignees}, creator: {self.creator}>'
+        return f'<Ticket title:{self.title}, assignees: {self.assignees}, creator: {self.creator}>'
     
 class Comment(db.Model, SerializerMixin):
     __tablename__ = 'comments'
@@ -88,7 +105,7 @@ class Comment(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     summary = db.Column(db.String, nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.datetime(2024,2,2))
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     
     user_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
     ticket_id = db.Column(db.Integer(), db.ForeignKey('tickets.id'))
@@ -99,7 +116,6 @@ class Comment(db.Model, SerializerMixin):
     def __repr__(self):
         return f'<Comment {self.id}: {self.summary}>'
     
-
 class TicketAssignee(db.Model, SerializerMixin):
     __tablename__ = 'ticket_assignees'
 
@@ -117,7 +133,7 @@ class TicketAssignee(db.Model, SerializerMixin):
     
     role = db.Column(db.String(50), nullable=False)  # Role of the user in the ticket (e.g., Developer)
     # assigned_on = db.Column(db.DateTime, default=datetime.utcnow)  # When the user was assigned
-    active = db.Column(db.Boolean, default=True)  # Whether the user is currently active on the ticket
+    # active = db.Column(db.Boolean, default=True)  # Whether the user is currently active on the ticket
     
     ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
