@@ -5,12 +5,12 @@ import Background from './Background';
 
 const SingleTicketPage = () => {
   const { ticketId } = useParams();
-  const { user, setTickets } = useOutletContext();
+  const { user } = useOutletContext();
   const [ticket, setTicket] = useState(null);
   const [newAssignee, setNewAssignee] = useState('');
   const [newComment, setNewComment] = useState('');
   const [status, setStatus] = useState('');
-  const [assigneeRole, setAssigneeRole] = useState('')
+  const [assigneeRole, setAssigneeRole] = useState('tester')
   const statusOptions = ['open', 'in-progress', 'closed'];
 
   useEffect(() => {
@@ -27,12 +27,13 @@ const SingleTicketPage = () => {
     fetchTicket();
   }, [ticketId]);
 
-  const handleAddAssignee = async () => {
+  const handleAddAssignee = async (e) => {
+    e.preventDefault();
     try {
       const response = await fetch(`/api/tickets/${ticketId}/assignees`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ role: 'developer', user_id: newAssignee }),
+        body: JSON.stringify({ role: assigneeRole, user_id: parseInt(newAssignee) }),
       });
       if (response.ok) {
         const updatedTicket = await response.json();
@@ -122,9 +123,9 @@ const SingleTicketPage = () => {
         <div className="mb-6">
           <h2 className="text-xl font-semibold text-gray-800">Assignees:</h2>
           <ul className="list-disc list-inside pl-5">
-            {console.log(ticket)}
+            {/* {console.log(ticket)} */}
             {ticket.ticket_assignees.map(assignee => (
-              <li key={assignee.id} className="text-gray-600">{assignee}assignee</li>
+              <li key={assignee.id} className="text-gray-600">assignee{assignee.user}</li>
             ))}
           </ul>
         </div>
