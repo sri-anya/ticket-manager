@@ -129,7 +129,7 @@ const SingleTicketPage = () => {
             ))}
           </ul>
         </div>
-        {ticket.creator.id === user.id && (
+        {/* {ticket.creator.id === user.id && ( */}
           <div className="mb-6">
             <h2 className="text-xl font-semibold text-gray-800">Add Assignee:</h2>
             <form onSubmit={handleAddAssignee}>
@@ -155,7 +155,7 @@ const SingleTicketPage = () => {
               </button>
             </form>
           </div>
-        )}
+        {/* )} */}
         <div className="mb-6">
           <h2 className="text-xl font-semibold text-gray-800">Comments:</h2>
           <div className="mb-4">
