@@ -1,42 +1,4 @@
-// import React from 'react'
-// import { useOutletContext } from "react-router-dom";
 
-// const TicketsContainer = () => {
-
-//   const { tickets, setTickets } = useOutletContext();
-
-//   const ticketList = tickets.map((ticket) => {
-//     return <TicketCard key={ticket.id} ticket={ticket} />
-// })
-//   return (
-//     <div>
-//       {ticketList}
-//     </div>
-//   )
-// }
-
-// export default TicketsContainer
-
-
-// import React from 'react';
-// import { useOutletContext } from 'react-router-dom';
-// import TicketCard from './TicketCard';
-
-// const TicketsContainer = () => {
-//   const { tickets } = useOutletContext();
-
-//   return (
-//     <div className="p-4">
-//       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-//         {tickets.map(ticket => (
-//           <TicketCard key={ticket.id} ticket={ticket} />
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default TicketsContainer;
 import React from 'react';
 import { useOutletContext } from 'react-router-dom';
 import Background from './Background';
