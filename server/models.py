@@ -126,7 +126,7 @@ class TicketAssignee(db.Model, SerializerMixin):
         '-ticket_id',
         '-user_id',
         '-ticket',
-        '-user'
+        # '-user'
     )
 
     id = db.Column(db.Integer, primary_key=True)

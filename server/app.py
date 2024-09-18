@@ -63,13 +63,13 @@ class Assignees(Resource):
         if not ticket:
             return make_response({"message": "Ticket not found"}, 404)
         
-        new_comment = Comment(
+        new_assignee = TicketAssignee(
             role=data['role'],
             user_id=data['user_id'],
             ticket_id=id  # Correct field name to reference the ticket
         )
 
-        db.session.add(new_comment)
+        db.session.add(new_assignee)
         db.session.commit()
 
         # Fetch the updated ticket to include the new comment
