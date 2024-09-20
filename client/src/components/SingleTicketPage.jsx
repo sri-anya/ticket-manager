@@ -171,7 +171,7 @@ const SingleTicketPage = () => {
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               placeholder="Add a comment..."
-              rows="4"
+              rows="2"
               className="p-2 border border-gray-300 rounded-md w-full"
             />
             <button
@@ -181,14 +181,13 @@ const SingleTicketPage = () => {
               Add Comment
             </button>
           </div>
-          <ul className="list-disc list-inside pl-5">
+          <ul className="list-disc pl-5">
             {ticket.comments.map(comment => (
               <li key={comment.id} className="mb-2">
                 <div className="flex items-center mb-1">
                   <span className="font-semibold text-gray-800">{comment.author.name}:</span>
                   <span className="ml-2 text-gray-600">{comment.summary}</span>
                 </div>
-                <span className="text-sm text-gray-500">{new Date(comment.timestamp).toLocaleString()}</span>
               </li>
             ))}
           </ul>
