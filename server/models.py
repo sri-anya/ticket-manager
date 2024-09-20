@@ -63,9 +63,9 @@ class Ticket(db.Model, SerializerMixin):
         '-creator.password_hash'
         '-creator.comments',
         '-comments.ticket',
-        '-ticket_assignees',
-        '-ticket_assignees.user',
         '-ticket_assignees.ticket',
+        # '-ticket_assignees.user',
+        # '-ticket_assignees.ticket',
         '-tickets_created',
         '-tickets_created.id',
         '-tickets_created.email',
