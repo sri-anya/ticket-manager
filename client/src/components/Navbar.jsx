@@ -24,7 +24,7 @@ const Navbar = ({user, setUser}) => {
                 <div className="logo cursor-pointer"><img src="/dp-black.svg" alt="" /></div>
                 <div className="options">
                     <ul className='flex gap-8'>
-                        <Link className='cursor-pointer' to="/home">Home</Link>
+                        <Link className='cursor-pointer' to="/">Home</Link>
                         <Link className='cursor-pointer' to="/tickets">All Tickets</Link>
                         <Link className='cursor-pointer' to="/about">About</Link>
                         

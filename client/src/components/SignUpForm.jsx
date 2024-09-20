@@ -3,51 +3,15 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 
 function SignUpForm({ onLogin }) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [role, setRole] = useState("");
-  const [errors, setErrors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // function handleSubmit(e) {
-  //   e.preventDefault();
-  //   setErrors([]);
-  //   setIsLoading(true);
-  //   fetch("/api/signup", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       'Access-Control-Allow-Origin': '*',
-  //     },
-  //     body: JSON.stringify({
-  //       name,
-  //       email,
-  //       password,
-  //       password_confirmation: passwordConfirmation,
-  //       image_url: imageUrl,
-  //       role,
-  //     }),
-  //   }).then((r) => {
-  //     setIsLoading(false);
-  //     if (r.ok) {
-  //       r.json().then((user) => onLogin(user));
-  //     } else {
-  //       r.json().then((err) => setErrors(err.errors));
-  //     }
-  //   });
-  // }
-  
   // Appliying Formik
-
-  // const formSchema = yup.object().shape({
-  //   email: yup.string().email("Invalid email").required("Must enter email"),
-  //   name: yup.string().required("Must enter a name").max(15),
-  //   password: yup.string().min(5, 'Too short').max(20, 'To Long!').required('Required'),
-  //   password_confirmation: yup.string().min(5, 'Too short').max(20, 'To Long!').required('Required')
-  // });
+  const formSchema = yup.object().shape({
+    email: yup.string().email("Invalid email").required("Must enter email"),
+    name: yup.string().required("Must enter a name").max(15),
+    password: yup.string().min(5, 'Too short').max(20, 'To Long!').required('Required'),
+    password_confirmation: yup.string().min(5, 'Too short').max(20, 'To Long!').required('Required')
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -58,7 +22,7 @@ function SignUpForm({ onLogin }) {
       image_url: "",
       role: "",
     },
-    // validationSchema: formSchema,
+    validationSchema: formSchema,
     onSubmit: (values) => {
       setIsLoading(true);
       fetch("/api/signup", {
@@ -71,9 +35,7 @@ function SignUpForm({ onLogin }) {
         setIsLoading(false);
         if (r.ok) {
           r.json().then((user) => onLogin(user));
-        } else {
-          r.json().then((err) => setErrors(err.errors));
-        }
+        } 
       });
     },
   });

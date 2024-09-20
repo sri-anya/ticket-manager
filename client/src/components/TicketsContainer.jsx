@@ -11,8 +11,6 @@ const TicketsContainer = () => {
     navigate(`/tickets/${ticketId}`); // Navigate to the single ticket page
   };
 
-  
-
   const handleDelete = async (ticketId) => {
     try {
       // Make a DELETE request to your API

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import Navbar from './Navbar.jsx';
+import Background from './Background.jsx';
 
 const About = () => {
   const [user, setUser] = useState({
@@ -9,10 +10,10 @@ const About = () => {
   });
   return (
     <div>
-      
-      {/* <Navbar user={user} setUser={setUser} /> */}
+      <Background/>
+
       <main className='flex gap-20 px-44 py-28'>
-        <div className="image h-[1000] w-[450]"><img width="450" height="500" className='object-contain' src="/chefImage.jpg" alt="" /></div>
+        
         <div className="content w-3/4 py-8">
           <h1 className='text-lg font-medium'>Hi There!</h1>
           <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>

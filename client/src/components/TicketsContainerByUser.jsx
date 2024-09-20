@@ -5,7 +5,7 @@ import Background from './Background';
 
 const TicketsContainerByUser = () => {
   const { user,tickets } = useOutletContext();
-  const ticketsByUser = tickets.filter(ticket=>ticket.creator.id == user.id)
+  const ticketsByUser = tickets.filter(ticket=>{console.log(ticket.creator.id); return  ticket.creator.id == user.id})
   return (
     <div className="p-4">
       <Background/>
@@ -20,7 +20,7 @@ const TicketsContainerByUser = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {console.log(ticketsByUser)}
+          
           {ticketsByUser.map(ticket => (
             <tr key={ticket.id}>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{ticket.title}</td>

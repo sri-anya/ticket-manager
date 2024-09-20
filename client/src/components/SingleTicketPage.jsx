@@ -3,15 +3,17 @@ import { useParams } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
 import Background from './Background';
 
+
 const SingleTicketPage = () => {
   const { ticketId } = useParams();
-  const { user } = useOutletContext();
+  const { user, setTickets } = useOutletContext();
   const [ticket, setTicket] = useState(null);
   const [newAssignee, setNewAssignee] = useState('');
   const [newComment, setNewComment] = useState('');
   const [status, setStatus] = useState('');
   const [assigneeRole, setAssigneeRole] = useState('tester')
   const statusOptions = ['open', 'in-progress', 'closed'];
+
 
   useEffect(() => {
     const fetchTicket = async () => {
@@ -79,6 +81,12 @@ const SingleTicketPage = () => {
         const updatedTicket = await response.json();
         setTicket(updatedTicket);
         setStatus(newStatus); // Update the local status
+        
+        setTickets((prevTickets) =>
+          prevTickets.map(ticket =>
+              ticket.id === updatedTicket.id ? updatedTicket : ticket
+          )
+      );
       } else {
         console.error('Error updating status');
       }
@@ -99,7 +107,7 @@ const SingleTicketPage = () => {
           <p className="text-gray-600">{ticket.summary}</p>
         </div>
         <div className="mb-6">
-          <h2 className="text-xl font-semibold text-gray-800">Status:</h2>
+          <h2 className="text-xl font-semibold text-gray-800">Status: {ticket.status}</h2>
           <select
             value={status}
             onChange={handleStatusChange}
@@ -123,13 +131,13 @@ const SingleTicketPage = () => {
         <div className="mb-6">
           <h2 className="text-xl font-semibold text-gray-800">Assignees:</h2>
           <ul className="list-disc list-inside pl-5">
-            {/* {console.log(ticket)} */}
+           
             {ticket.ticket_assignees.map(assignee => (
-              <li key={assignee.id} className="text-gray-600">assignee{assignee.user}</li>
+              <li key={assignee.id} className="text-gray-600">{assignee.user.name}</li>
             ))}
           </ul>
         </div>
-        {/* {ticket.creator.id === user.id && ( */}
+        
           <div className="mb-6">
             <h2 className="text-xl font-semibold text-gray-800">Add Assignee:</h2>
             <form onSubmit={handleAddAssignee}>
@@ -155,7 +163,7 @@ const SingleTicketPage = () => {
               </button>
             </form>
           </div>
-        {/* )} */}
+        
         <div className="mb-6">
           <h2 className="text-xl font-semibold text-gray-800">Comments:</h2>
           <div className="mb-4">

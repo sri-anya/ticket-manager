@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import Divider from './Divider';
 import { useOutletContext } from "react-router-dom";
+import { useFormik } from "formik";
+import * as yup from "yup";
 
 const NewTicket = () => {
     const { tickets, setTickets } = useOutletContext();
@@ -46,7 +48,37 @@ const NewTicket = () => {
         const value = event.target.value;
         setNewTicketData({ ...newTicketData, [name]: value });
     };
-
+    
+    const formik = useFormik({
+        initialValues: {
+            title: "",
+            summary: "",
+            status: "open", // Reset to default value
+            priority: "low", // Reset to default value
+            created_by: user.id,
+        },
+        // validationSchema: formSchema,
+        onSubmit: (values) => {
+           
+          fetch("/api/tickets", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(values, null, 2),
+          }).then((newTicket) => {
+            setTickets([...tickets, newTicket]);
+            setNewTicketData({ 
+                title: "",
+                summary: "",
+                status: "open", // Reset to default value
+                priority: "low", // Reset to default value
+                created_by: user.id,
+            });
+            setIsFormVisible(false); 
+        });
+        },
+      });
     return (
         <div>
             {isFormVisible ? (
@@ -62,6 +94,8 @@ const NewTicket = () => {
                             id="title" 
                             onChange={handleChange} 
                             value={newTicketData.title} 
+                            // onChange={formik.handleChange}
+                            // value={formik.values.title}
                             required
                         />
                     </div>
@@ -75,6 +109,8 @@ const NewTicket = () => {
                             id="summary" 
                             onChange={handleChange} 
                             value={newTicketData.summary} 
+                            // onChange={formik.handleChange}
+                            // value={formik.values.summary}
                         />
                     </div>
 
@@ -86,6 +122,8 @@ const NewTicket = () => {
                             id="status"
                             onChange={handleChange}
                             value={newTicketData.status}
+                            // onChange={formik.handleChange}
+                            // value={formik.values.status}
                         >
                             <option value="open">Open</option>
                             <option value="in-progress">In Progress</option>
@@ -101,6 +139,8 @@ const NewTicket = () => {
                             id="priority"
                             onChange={handleChange}
                             value={newTicketData.priority}
+                            // onChange={formik.handleChange}
+                            // value={formik.values.priority}
                         >
                             <option value="low">Low</option>
                             <option value="medium">Medium</option>
